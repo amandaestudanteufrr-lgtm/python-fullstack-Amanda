@@ -62,10 +62,16 @@ def ex02_validador_acesso():
         usuário → "admin"
         senha   → "iteam2025"
     """
-    # SUA SOLUÇÃO AQUI
+    usuario= "admin"
+    senha="iteam2025"
+    login=str(input("Qual seu Login? "))
+    token=str(input("Digite a senha? "))
+    if login==usuario and token==senha :
+        print("Acesso Liberado")
+    else:
+        print("Acesso Negado.Dados Incorreto")
     pass
-usuario= "admin"
-senha="iteam2025"
+
 
 
 
@@ -77,7 +83,11 @@ def ex03_tabuada():
     """
     Solicita um número inteiro e exibe sua tabuada de 1 a 10.
     """
-    # SUA SOLUÇÃO AQUI
+    print("----Tabuada----")
+    numero=int(input("Digite um número: "))
+    i=int(0)
+    for i in range(11):
+        print(f"{numero}X{i}={numero*i}")
     pass
 
 
@@ -90,7 +100,11 @@ def ex04_contador_regressivo():
     Solicita um número inteiro positivo e faz a contagem
     regressiva até 0, finalizando com '🚀 Lançamento!'.
     """
-    # SUA SOLUÇÃO AQUI
+    x=int(input("Digite um número:"))
+    while x>=0 :
+        print(x)
+        x-=1
+    print("🚀 Lançamento!",end=" ")
     pass
 
 
@@ -105,7 +119,11 @@ def ex05_buscador_break():
     """
     estoque = ["Teclado", "Mouse", "Webcam", "Monitor", "Headset", "Notebook"]
 
-    # SUA SOLUÇÃO AQUI
+    for i,produto in enumerate(estoque):
+        print(f"Verificando o estoque {i}:{produto}")
+        if produto=="Monitor":
+            print(f"\n🎉 Encontrado! O Monitor está na posição {i} da lista.")
+            break
     pass
 
 
@@ -119,7 +137,20 @@ def ex06_filtro_continue():
     com continue e calcula soma, média e total ignorado.
     """
     leituras = [12.5, None, 8.3, None, 15.0, 9.7, None, 11.2, 6.8, None]
-
+    soma=0
+    cont=0
+    ign=0
+    for i,numeros in enumerate(leituras):
+            if numeros!=None:
+                soma=numeros+soma
+                cont=cont+1
+            elif numeros==None:
+                ign=ign+1
+                continue
+    print(f"A soma dos números é: {soma}")
+    print(f"A média é {soma/cont:.2f}")
+    print(f"O total de valores ignorados é {ign}")
+    
     # SUA SOLUÇÃO AQUI
     pass
 
@@ -139,6 +170,25 @@ def ex07_validacao_nota():
         5.0 a 6.9  → C – Regular
         < 5.0      → D – Insuficiente
     """
+    while True:
+     try:
+         nota = float(input("Digite sua nota: "))
+         if nota>=9.0 and nota<=10.0:
+             print(f"Parabéns você tirou uma Excelente nota:{nota} ")
+             break
+         elif nota>=7.0 and nota<=8.9:
+             print(f"Parabéns você tirou uma Boa nota:{nota} ")
+             break
+         elif nota>=5.0 and nota<=6.9:
+            print(f"Você foi Regular sua nota é :{nota} ")
+            break
+         else: 
+            print(f"Você foi Insuficiente sua nota é :{nota} ")
+            break
+         
+     except ValueError:
+        print("Erro! Você não digitou um número válido.")
+
     # SUA SOLUÇÃO AQUI
     pass
 
@@ -302,13 +352,13 @@ if __name__ == "__main__":
     print("=" * 50)
 
     # Descomente linha por linha conforme for resolvendo:
-    ex01_classificador_temperatura()
-    # ex02_validador_acesso()
-    # ex03_tabuada()
-    # ex04_contador_regressivo()
-    # ex05_buscador_break()
-    # ex06_filtro_continue()
-    # ex07_validacao_nota()
+    #ex01_classificador_temperatura()
+    #ex02_validador_acesso()
+    #ex03_tabuada()
+    #ex04_contador_regressivo()
+    #ex05_buscador_break()
+    #ex06_filtro_continue()
+    #ex07_validacao_nota()
     # ex08_calculadora_segura()
     # ex09_padrao_numerico()
     # ex10_jogo_adivinhacao()
