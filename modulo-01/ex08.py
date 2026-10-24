@@ -1,0 +1,5 @@
+temperatura=float(36.5)
+F=float(temperatura*(9/5)+32)
+K=float(temperatura+273.15)
+print(f"A temperatura em Fahrenheit é: {F} °F")
+print(f"A temperatura em Kelvin é: {F} K")

@@ -3,8 +3,8 @@
 MÓDULO 2 – Estruturas de Controle
 Curso de Capacitação Full Stack – ITEAM
 
-Aluno(a): <SEU NOME COMPLETO AQUI>
-Data    : <DATA DE ENTREGA>
+Aluno(a): <Amanda Karolina Vasques Nascimento>
+Data    : <21/10/2026>
 =============================================================
 
 INSTRUÇÕES:
@@ -36,8 +36,18 @@ def ex01_classificador_temperatura():
         25 a 34   → ☀️ Quente
         >= 35     → 🔥 Muito quente
     """
-    # SUA SOLUÇÃO AQUI
-    pass
+    temperatura=int(input("Digite uma temperatura em ºC:" ))
+    if temperatura < 0 :
+        print(f"A temperatura está a {temperatura} ºC o clima está ❄️ Congelante")
+    elif temperatura>=0 and temperatura<=14:
+        print(f"A temperatura está a {temperatura} ºC o clima está 🥶 Frio")
+    elif temperatura>=15 and temperatura<=24:
+        print(f"A temperatura está a {temperatura} ºC o clima está 😊 Agradável")
+    elif temperatura>=25 and temperatura<=34:
+        print(f"A temperatura está a {temperatura} ºC o clima está ☀️ Quente")
+    else:
+        print(f"A temperatura está a {temperatura} ºC o clima está 🔥 Muito quente")
+
 
 
 # ==============================================================
@@ -54,6 +64,9 @@ def ex02_validador_acesso():
     """
     # SUA SOLUÇÃO AQUI
     pass
+usuario= "admin"
+senha="iteam2025"
+
 
 
 # ==============================================================
@@ -285,11 +298,11 @@ def ex15_menu_sistema():
 if __name__ == "__main__":
     print("\n" + "=" * 50)
     print("MÓDULO 2 – Estruturas de Controle")
-    print(f"Aluno(a): <SEU NOME>")
+    print(f"Aluno(a): <Amanda Karolina Vasques Nascimento>")
     print("=" * 50)
 
     # Descomente linha por linha conforme for resolvendo:
-    # ex01_classificador_temperatura()
+    ex01_classificador_temperatura()
     # ex02_validador_acesso()
     # ex03_tabuada()
     # ex04_contador_regressivo()

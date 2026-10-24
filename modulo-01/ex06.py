@@ -1,0 +1,13 @@
+Ano=int(input("Digite em que ano estamos: "))
+Temperatura=float(input("Digite qual a temperatura em ºC: "))
+cidade=str(input("Digite qual é a sua cidade: "))
+chuva=bool(input("Está chovendo?(s/n)"))
+previsao=(None)
+palavra=str()
+
+print(Ano,type(Ano))
+print(Temperatura,type(Temperatura))
+print(cidade,type(cidade))
+print(chuva,type(chuva))
+print(previsao,type(previsao))
+print(palavra,type(palavra))
