@@ -203,6 +203,43 @@ def ex08_calculadora_segura():
     Trata: ValueError, ZeroDivisionError, operação inválida.
     Usa else para exibir o resultado e finally para encerrar.
     """
+    try:
+        numero1=float(input("Digite o primeiro número: "))
+        numero2=float(input("Digite o segundo número: "))
+        operacao=str(input("Qual operação deseja fazer (+, -, *, /): "))
+
+    except ValueError:
+        print("Erro: Você digitou um valor inválido. Use apenas números.")
+
+        soma=0
+        subtracao=0
+        multiplicacao=0
+        divisao=0
+
+    else:
+
+        if operacao=="+":
+            soma= numero1 + numero2
+            print(f"A soma de {numero1} + {numero2} é igual: {soma:.2f}")
+        elif operacao=="-":
+            subtracao= numero1 - numero2
+            print(f"A subtração de {numero1} - {numero2} é igual: {subtracao:.2f}")
+        elif operacao=="*":
+            multiplicacao= numero1 * numero2
+            print(f"A multiplicação de {numero1} * {numero2} é igual: {multiplicacao:.2f}")
+        else:
+            print("Erro: Operação inválida!")
+        
+        try:
+            if operacao == "/":
+                divisao = numero1 / numero2
+                print(f"A divisão de {numero1} / {numero2} é igual: {divisao:.2f}")
+        except ZeroDivisionError:
+            print("Erro: Não é possível dividir por zero!")
+    
+    finally:
+        print("Operação finalizada.")
+
     # SUA SOLUÇÃO AQUI
     pass
 
@@ -222,7 +259,19 @@ def ex09_padrao_numerico():
 
     Desafio extra: gera também o triângulo decrescente logo abaixo.
     """
-    # SUA SOLUÇÃO AQUI
+    numero=int(input("Digite um número: "))
+    for i in range(1,numero+1):
+        print(end="\n ")
+        for j in range(1,i+1):
+            print(j,end=" ")
+
+    print("\n")
+
+    for i in range(numero,0,-1):
+        print(end="\n ")
+        for j in range(1,i):
+            print(j,end=" ")
+    # SUA SOLUÇÃO AQUIs
     pass
 
 
@@ -359,8 +408,8 @@ if __name__ == "__main__":
     #ex05_buscador_break()
     #ex06_filtro_continue()
     #ex07_validacao_nota()
-    # ex08_calculadora_segura()
-    # ex09_padrao_numerico()
+    #ex08_calculadora_segura()
+    ex09_padrao_numerico()
     # ex10_jogo_adivinhacao()
     # ex11_numero_primo()
     # ex12_analisador_senha()
