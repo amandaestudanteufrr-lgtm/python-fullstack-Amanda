@@ -25,7 +25,16 @@ def obter_turma():
     #       - Se o valor digitado for "sair" (após .strip().lower()), retorne None.
     #       - Se validar_turma() retornar True, retorne o nome da turma.
     #       - Caso contrário, imprima uma mensagem de erro e repita o loop.
-    pass  # ← apague esta linha e escreva seu código aqui
+    while True:
+        entrada = input("Digite o nome da turma (ou 'sair' para encerrar): ")
+        
+        if entrada.strip().lower() == "sair":
+            return None
+            
+        if validar_turma(entrada):
+            return entrada.strip()
+        else:
+            print("❌ Nome de turma inválido. Não pode ser vazio ou 'sair'. Tente novamente.\n")
 
 
 def obter_aluno():
@@ -38,7 +47,16 @@ def obter_aluno():
     """
     # TODO: Mesma lógica de obter_turma(), mas usando validar_aluno().
     #       Lembre de verificar "sair" antes de validar.
-    pass  # ← apague esta linha e escreva seu código aqui
+    while True:
+        entrada = input("Digite o nome completo do aluno (ou 'sair' para encerrar): ")
+        
+        if entrada.strip().lower() == "sair":
+            return None
+            
+        if validar_aluno(entrada):
+            return entrada.strip()
+        else:
+            print("❌ Nome inválido. Deve conter ao menos nome e sobrenome, e não pode ser vazio. Tente novamente.\n")
 
 
 def obter_nota(numero_da_nota):
@@ -55,7 +73,15 @@ def obter_nota(numero_da_nota):
     #       Chame validar_nota() com o valor digitado.
     #       - Se retornar None (inválido), exiba uma mensagem de erro.
     #       - Se retornar um float válido, retorne-o.
-    pass  # ← apague esta linha e escreva seu código aqui
+    while True:
+        entrada = input(f"Digite a Nota {numero_da_nota} (0.0 a 10.0): ")
+        
+        nota_convertida = validar_nota(entrada)
+        
+        if nota_convertida is not None:
+            return nota_convertida
+        else:
+            print("❌ Nota inválida! Digite um valor numérico entre 0.0 e 10.0.\n")
 
 
 def main():
@@ -85,7 +111,28 @@ def main():
 
     # TODO (Passo 3): Fora do loop, imprima uma mensagem de encerramento.
 
-    pass  # ← apague esta linha e escreva seu código aqui
+    turma = obter_turma()
+    if turma is None:
+        print("\nEncerrando...")
+        return
+
+    while True:
+        print(f"\n--- Cadastro para a Turma: {turma} ---")
+        
+        aluno = obter_aluno()
+        if aluno is None:
+            break
+            
+        nota1 = obter_nota(1)
+        nota2 = obter_nota(2)
+        nota3 = obter_nota(3)
+        
+        salvar_nota(turma, aluno, nota1, nota2, nota3)
+        print(f"✅ Aluno(a) '{aluno}' cadastrado(a) com sucesso!")
+        
+        ler_notas(turma)
+
+    print("\n👋 Sistema encerrado. Até mais!")
 
 
 # ── Ponto de entrada do programa ──────────────────────────

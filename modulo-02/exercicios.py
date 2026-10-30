@@ -286,10 +286,27 @@ def ex10_jogo_adivinhacao():
     A cada erro, indica se o número é maior ou menor.
     """
     import random
-    numero_secreto = random.randint(1, 100)
 
-    # SUA SOLUÇÃO AQUI
-    pass
+    numero_secreto = random.randint(1, 100)
+    numero = int(input("Digite um número: "))
+    tentativas = 0
+
+    while True:
+        tentativas += 1
+    
+        if numero < numero_secreto:
+            print("O número secreto é maior")
+        elif numero > numero_secreto:
+            print("O número secreto é menor")
+        else:
+            print(f"🎉 Parabéns! Você acertou em {tentativas} tentativas.")
+            break
+        
+        if tentativas >= 7:
+            print(f"💀 Game over! O número era {numero_secreto}")
+            break
+        
+        numero = int(input("Digite outro número: "))
 
 
 # ==============================================================
@@ -409,8 +426,8 @@ if __name__ == "__main__":
     #ex06_filtro_continue()
     #ex07_validacao_nota()
     #ex08_calculadora_segura()
-    ex09_padrao_numerico()
-    # ex10_jogo_adivinhacao()
+    #ex09_padrao_numerico()
+    ex10_jogo_adivinhacao()
     # ex11_numero_primo()
     # ex12_analisador_senha()
     # ex13_caixa_eletronico()

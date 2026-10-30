@@ -1,5 +1,4 @@
-# main.py
-# =============================================================================
+#=============================================================================
 # ITEAM | Projeto: Salão de Beleza & Barbearia
 # Arquivo: main.py
 # Assunto: Ponto de entrada — integra todos os módulos do projeto
@@ -34,9 +33,9 @@ def main():
     # 1. Coordenador
     # ------------------------------------------------------------------
     coord = Coordenador(
-        nome           = "Mariana Oliveira",
-        cpf            = "000.111.222-33",
-        telefone       = "(92) 98888-0000",
+        nome         = "Mariana Oliveira",
+        cpf          = "000.111.222-33",
+        telefone     = "(92) 98888-0000",
         salario_base   = 5000.00,
         percentual_bonus = 0.20,
     )
@@ -56,26 +55,26 @@ def main():
     #    BUG 14: argumentos fora de ordem nos dois primeiros
     # ------------------------------------------------------------------
     func_ana = Funcionario(
-        "Cabeleireira",        # ← ERRADO: deveria ser o nome primeiro
+        "Ana Costa",           # ← ERRADO: deveria ser o nome primeiro
         "111.222.333-44",
         "(92)99999-1111",
-        "Ana Costa",           # ← ERRADO: deveria ser o cargo aqui
+        "Cabeleireira",            # ← ERRADO: deveria ser o cargo aqui
         2200.00,
     )
 
     func_carlos = Funcionario(
-        "Barbeiro",            # ← ERRADO: mesmo problema de ordem
+        "Carlos Melo",             # ← ERRADO: mesmo problema de ordem
         "222.333.444-55",
         "(92)99999-2222",
-        "Carlos Melo",
+        "Barbeiro",
         2000.00,
     )
 
     # Estes dois estão corretos (para referência)
     func_lucia = Funcionario("Lúcia Ferreira",  "333.444.555-66",
-                             "(92)99999-3333", "Manicure", 1900.00)
+                            "(92)99999-3333", "Manicure", 1900.00)
     func_bia   = Funcionario("Beatriz Santos",  "444.555.666-77",
-                             "(92)99999-4444", "Esteticista", 2100.00)
+                            "(92)99999-4444", "Esteticista", 2100.00)
 
     # ------------------------------------------------------------------
     # 4. Equipes
@@ -96,8 +95,8 @@ def main():
     print("\n[Cadastrando equipamentos...]")
     equip1 = Equipamento("EQ001", "Cadeira Hidráulica",   "Cadeira reclinável para corte", 1800.00)
     equip2 = Equipamento("EQ002", "Secador Profissional",  "2400W, bivolt",                  650.00)
-    equip3 = Equipamento("EQ003", "Maca de Massagem",     "Espuma D45, suporte 200kg",      980.00)
-    equip4 = Equipamento("EQ004", "Autoclave",            "Esterilizador 21L",             3200.00)
+    equip3 = Equipamento("EQ003", "Maca de Massagem",    "Espuma D45, suporte 200kg",      980.00)
+    equip4 = Equipamento("EQ004", "Autoclave",             "Esterilizador 21L",             3200.00)
 
     # ------------------------------------------------------------------
     # 6. Registra tudo no salão

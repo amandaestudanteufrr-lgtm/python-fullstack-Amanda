@@ -15,13 +15,17 @@ INSTRUÇÕES GERAIS:
   5. Execute e confira: os prints devem ser os mesmos.
 
 NÍVEIS:
-  🟢 Atividade 1 — Básico        (dicionário simples)
+  🟢 Atividade 1 — Básico       (dicionário simples)
   🟢 Atividade 2 — Básico+       (classe Registry)
   🟡 Atividade 3 — Intermediário (decorator + classe)
   🟡 Atividade 4 — Intermediário (Decision Engine)
   🔴 Atividade 5 — Avançado      (Registry completo + plugins)
 =============================================================
 """
+
+import math
+import json
+from dataclasses import dataclass as dc
 
 
 # ==============================================================
@@ -63,34 +67,31 @@ print(calcular_antes("modulo",        10, 3))    # → 1
 
 
 # ── DEPOIS (Registry) ────────────────────────────────────────
-"""
-TAREFA:
-  1. Crie um dicionário OPERACOES_REGISTRY mapeando
-     nome → função (use lambdas ou funções nomeadas).
-  2. Implemente calcular_depois() consultando o dicionário.
-  3. Mantenha o tratamento de ZeroDivisionError e ValueError.
-  4. Adicione uma operação nova: "raiz" (√a) sem tocar em
-     calcular_depois() — só adicionando no dicionário.
+OPERACOES_REGISTRY = {
+    "soma": lambda a, b: a + b,
+    "subtracao": lambda a, b: a - b,
+    "multiplicacao": lambda a, b: a * b,
+    "divisao": lambda a, b: a / b if b != 0 else (_ for _ in ()).throw(ZeroDivisionError("Divisão por zero.")),
+    "potencia": lambda a, b: a ** b,
+    "modulo": lambda a, b: a % b,
+    # Operação extra adicionada sem tocar em calcular_depois()
+    "raiz": lambda a, b=None: math.sqrt(a)
+}
 
-DICA:
-  import math
-  OPERACOES_REGISTRY = {
-      "soma": lambda a, b: a + b,
-      ...
-  }
-"""
+def calcular_depois(operacao: str, a: float, b: float = 0) -> float:
+    func = OPERACOES_REGISTRY.get(operacao)
+    if func is None:
+        raise ValueError(f"Operação desconhecida: {operacao}")
+    return func(a, b)
 
-# SUA SOLUÇÃO AQUI ↓↓↓
-
-# OPERACOES_REGISTRY: dict = { ... }
-
-# def calcular_depois(operacao: str, a: float, b: float) -> float:
-#     ...
-
-# print("\n[DEPOIS]")
-# print(calcular_depois("soma",          10, 3))
-# print(calcular_depois("multiplicacao", 10, 3))
-# print(calcular_depois("raiz",          16, 0))   # nova operação!
+print("\n[DEPOIS]")
+print(calcular_depois("soma",          10, 3))
+print(calcular_depois("subtracao",     10, 3))
+print(calcular_depois("multiplicacao", 10, 3))
+print(calcular_depois("divisao",       10, 4))
+print(calcular_depois("potencia",      2,  8))
+print(calcular_depois("modulo",        10, 3))
+print(calcular_depois("raiz",          16, 0))    # → 4.0 (nova operação!)
 
 
 # ==============================================================
@@ -139,42 +140,75 @@ gerar_relatorio_antes("chaves",    dados_exemplo)
 
 
 # ── DEPOIS (Registry com classe) ─────────────────────────────
-"""
-TAREFA:
-  1. Implemente (ou copie do material) a classe Registry.
-  2. Crie uma instância: relatorio_registry = Registry()
-  3. Extraia cada bloco do if/elif para uma função separada.
-  4. Registre cada função no registry.
-  5. Implemente gerar_relatorio_depois() sem nenhum if/elif.
-  6. Adicione um formato novo "json_pretty" (usando json.dumps)
-     apenas adicionando-o ao registry — sem mudar a função principal.
+class Registry:
+    def __init__(self, nome: str = "Registry"):
+        self.nome = nome
+        self._store = {}
 
-DICA:
-  class Registry:
-      def __init__(self): self._store = {}
-      def register(self, chave, valor): ...
-      def get(self, chave): ...
-      def __contains__(self, chave): ...
-"""
+    def register(self, chave: str, valor) -> None:
+        self._store[chave] = valor
 
-# SUA SOLUÇÃO AQUI ↓↓↓
+    def get(self, chave: str):
+        if chave not in self._store:
+            raise KeyError(f"Chave não registrada no '{self.nome}': '{chave}'")
+        return self._store[chave]
 
-# class Registry: ...
+    def update(self, chave: str, valor) -> None:
+        self.register(chave, valor)
 
-# def _relatorio_resumo(dados: dict) -> None: ...
-# def _relatorio_detalhado(dados: dict) -> None: ...
-# ...
+    def unregister(self, chave: str) -> None:
+        if chave in self._store:
+            del self._store[chave]
 
-# relatorio_registry = Registry()
-# relatorio_registry.register("resumo", _relatorio_resumo)
-# ...
+    def __contains__(self, chave: str) -> bool:
+        return chave in self._store
 
-# def gerar_relatorio_depois(formato: str, dados: dict) -> None:
-#     ...
+    def listar_chaves(self) -> list[str]:
+        return list(self._store.keys())
 
-# print("\n[DEPOIS]")
-# gerar_relatorio_depois("resumo",     dados_exemplo)
-# gerar_relatorio_depois("json_pretty", dados_exemplo)  # nova!
+def _relatorio_resumo(dados: dict) -> None:
+    print(f"[RESUMO] Total de itens: {len(dados)}")
+    for k, v in dados.items():
+        print(f"  {k}: {v}")
+
+def _relatorio_detalhado(dados: dict) -> None:
+    print("[DETALHADO] ─────────────────")
+    for k, v in dados.items():
+        tipo = type(v).__name__
+        print(f"  {k:15} | {str(v):20} | tipo: {tipo}")
+    print("─────────────────────────────")
+
+def _relatorio_contagem(dados: dict) -> None:
+    print(f"[CONTAGEM] {len(dados)} campo(s) registrado(s).")
+
+def _relatorio_chaves(dados: dict) -> None:
+    print(f"[CHAVES] {list(dados.keys())}")
+
+def _relatorio_valores(dados: dict) -> None:
+    print(f"[VALORES] {list(dados.values())}")
+
+relatorio_registry = Registry("RelatorioRegistry")
+relatorio_registry.register("resumo", _relatorio_resumo)
+relatorio_registry.register("detalhado", _relatorio_detalhado)
+relatorio_registry.register("contagem", _relatorio_contagem)
+relatorio_registry.register("chaves", _relatorio_chaves)
+relatorio_registry.register("valores", _relatorio_valores)
+
+# Formato extra adicionado ao registry
+relatorio_registry.register("json_pretty", lambda d: print(f"[JSON] {json.dumps(d, indent=2, ensure_ascii=False)}"))
+
+def gerar_relatorio_depois(formato: str, dados: dict) -> None:
+    try:
+        handler = relatorio_registry.get(formato)
+    except KeyError:
+        raise ValueError(f"Formato desconhecido: {formato}")
+    handler(dados)
+
+print("\n[DEPOIS]")
+gerar_relatorio_depois("resumo",    dados_exemplo)
+gerar_relatorio_depois("contagem",  dados_exemplo)
+gerar_relatorio_depois("chaves",    dados_exemplo)
+gerar_relatorio_depois("json_pretty", dados_exemplo) # novo formato!
 
 
 # ==============================================================
@@ -245,35 +279,70 @@ for tipo, valor in casos:
 
 
 # ── DEPOIS (Registry com decorator) ──────────────────────────
-"""
-TAREFA:
-  1. Crie um Registry e um decorator @registrar_validador("tipo").
-  2. Cada validador vira uma função decorada:
+validador_registry = Registry("ValidadorRegistry")
 
-       @registrar_validador("email")
-       def validar_email(valor) -> tuple[bool, str]:
-           ...
+def registrar_validador(tipo: str):
+    def decorator(func):
+        validador_registry.register(tipo, func)
+        return func
+    return decorator
 
-  3. Implemente validar_campo_depois() sem if/elif.
-  4. DESAFIO: adicione um validador "url" que verifica se o
-     valor começa com "http://" ou "https://" e contém "."
-     Apenas criando a função — sem tocar em validar_campo_depois().
+@registrar_validador("email")
+def validar_email(valor) -> tuple[bool, str]:
+    valido = "@" in str(valor) and "." in str(valor).split("@")[-1]
+    return (valido, "" if valido else "Email inválido: falta @ ou domínio")
 
-DICA sobre o decorator:
-  validador_registry = Registry()
+@registrar_validador("cpf")
+def validar_cpf(valor) -> tuple[bool, str]:
+    digitos = "".join(c for c in str(valor) if c.isdigit())
+    valido  = len(digitos) == 11
+    return (valido, "" if valido else f"CPF inválido: esperado 11 dígitos, got {len(digitos)}")
 
-  def registrar_validador(tipo: str):
-      def decorator(func):
-          validador_registry.register(tipo, func)
-          return func
-      return decorator
+@registrar_validador("telefone")
+def validar_telefone(valor) -> tuple[bool, str]:
+    digitos = "".join(c for c in str(valor) if c.isdigit())
+    valido  = len(digitos) in (10, 11)
+    return (valido, "" if valido else "Telefone inválido: esperado 10 ou 11 dígitos")
 
-  @registrar_validador("email")
-  def validar_email(valor) -> tuple[bool, str]:
-      ...
-"""
+@registrar_validador("cep")
+def validar_cep(valor) -> tuple[bool, str]:
+    digitos = "".join(c for c in str(valor) if c.isdigit())
+    valido  = len(digitos) == 8
+    return (valido, "" if valido else "CEP inválido: esperado 8 dígitos")
 
-# SUA SOLUÇÃO AQUI ↓↓↓
+@registrar_validador("idade")
+def validar_idade(valor) -> tuple[bool, str]:
+    try:
+        idade  = int(valor)
+        valido = 0 <= idade <= 120
+        return (valido, "" if valido else f"Idade inválida: {idade} fora de [0, 120]")
+    except (ValueError, TypeError):
+        return (False, f"Idade inválida: '{valor}' não é inteiro")
+
+@registrar_validador("nome")
+def validar_nome(valor) -> tuple[bool, str]:
+    valido = isinstance(valor, str) and len(valor.strip()) >= 2
+    return (valido, "" if valido else "Nome inválido: mínimo 2 caracteres")
+
+# Desafio extra: Validador "url" sem tocar na função principal
+@registrar_validador("url")
+def validar_url(valor) -> tuple[bool, str]:
+    valido = str(valor).startswith(("http://", "https://")) and "." in str(valor)
+    return (valido, "" if valido else "URL inválida: deve iniciar com http:// ou https:// e conter domínio")
+
+def validar_campo_depois(tipo: str, valor) -> tuple[bool, str]:
+    try:
+        handler = validador_registry.get(tipo)
+        return handler(valor)
+    except KeyError:
+        return (False, f"Tipo de validação desconhecido: '{tipo}'")
+
+print("\n[DEPOIS]")
+casos_depois = casos + [("url", "https://iteam.com.br"), ("url", "site_sem_protocolo")]
+for tipo, valor in casos_depois:
+    ok, msg = validar_campo_depois(tipo, valor)
+    status  = "✅" if ok else "❌"
+    print(f"  {status} {tipo:10} | {str(valor):25} | {msg or 'OK'}")
 
 
 # ==============================================================
@@ -285,9 +354,7 @@ print("\n" + "=" * 60)
 print("ATIVIDADE 4 — Motor de Descontos de E-commerce")
 print("=" * 60)
 
-# ── ANTES (if/elif aninhado) ──────────────────────────────────
-from dataclasses import dataclass as dc
-
+# ── ANTES (if/elif aninhado)─────────────────────────────────
 @dc
 class Carrinho:
     valor_total:    float
@@ -353,48 +420,66 @@ for c in carrinhos_teste:
 
 
 # ── DEPOIS (Decision Engine + Registry) ──────────────────────
-"""
-TAREFA:
-  1. Crie um Registry de handlers. Cada handler recebe
-     um Carrinho e retorna tuple[float, str].
+desconto_registry = Registry("DescontoRegistry")
 
-  2. Crie a função decidir_regra(carrinho: Carrinho) -> str
-     — o Decision Engine. Ela contém TODA a lógica condicional
-     e retorna apenas uma chave simples como:
-         "cupom:blackfriday", "cliente:vip:alto", etc.
+desconto_registry.register("cupom:blackfriday", lambda c: (0.30, "Cupom Black Friday: 30%"))
+desconto_registry.register("cupom:bemvindo:valido", lambda c: (0.10, "Cupom de boas-vindas: 10%"))
+desconto_registry.register("cupom:bemvindo:invalido", lambda c: (0.0, "Cupom BEMVINDO10 apenas para novos clientes"))
+desconto_registry.register("cliente:vip:alto_valor", lambda c: (0.20, "VIP + compra >= R$500: 20%"))
+desconto_registry.register("cliente:vip:padrao", lambda c: (0.10, "VIP: 10% base"))
+desconto_registry.register("cliente:fiel:muitos_itens", lambda c: (0.15, "Fiel + 5 itens: 15%"))
+desconto_registry.register("cliente:fiel:padrao", lambda c: (0.08, "Fiel: 8%"))
+desconto_registry.register("fds:alto_valor", lambda c: (0.12, "FDS + >= R$200: 12%"))
+desconto_registry.register("fds:padrao", lambda c: (0.05, "Fim de semana: 5%"))
+desconto_registry.register("compra:acima_mil", lambda c: (0.10, "Compra acima de R$1.000: 10%"))
+desconto_registry.register("padrao", lambda c: (0.0, "Sem desconto aplicável"))
 
-  3. Registre um handler para cada chave.
+# Desafio extra: Aniversário da Loja
+desconto_registry.register("aniversario_loja", lambda c: (0.25, "Aniversário da Loja: 25%"))
 
-  4. Implemente calcular_desconto_depois() que:
-       chave   = decidir_regra(carrinho)
-       handler = desconto_registry.get(chave)
-       return  handler(carrinho)
+def decidir_regra(carrinho: Carrinho) -> str:
+    # Nova regra de aniversário da loja (Quarta-feira == 2, valor >= 300)
+    if carrinho.dia_semana == 2 and carrinho.valor_total >= 300:
+        return "aniversario_loja"
+    if carrinho.cupom == "BLACKFRIDAY":
+        return "cupom:blackfriday"
+    elif carrinho.cupom == "BEMVINDO10":
+        if carrinho.tipo_cliente != "novo":
+            return "cupom:bemvindo:invalido"
+        return "cupom:bemvindo:valido"
+    elif carrinho.tipo_cliente == "vip":
+        if carrinho.valor_total >= 500:
+            return "cliente:vip:alto_valor"
+        return "cliente:vip:padrao"
+    elif carrinho.tipo_cliente == "fiel":
+        if carrinho.quantidade_itens >= 5:
+            return "cliente:fiel:muitos_itens"
+        return "cliente:fiel:padrao"
+    elif carrinho.dia_semana in (5, 6):
+        if carrinho.valor_total >= 200:
+            return "fds:alto_valor"
+        return "fds:padrao"
+    elif carrinho.valor_total >= 1000:
+        return "compra:acima_mil"
+    return "padrao"
 
-  5. DESAFIO: adicione uma nova regra "aniversario_loja" que
-     aplica 25% quando dia_semana == 3 (quarta-feira) e
-     valor_total >= 300. Adicione SEM tocar em calcular_desconto_depois().
+def calcular_desconto_depois(carrinho: Carrinho) -> tuple[float, str]:
+    chave = decidir_regra(carrinho)
+    handler = desconto_registry.get(chave)
+    return handler(carrinho)
 
-ESTRUTURA SUGERIDA de chaves:
-  "cupom:blackfriday"
-  "cupom:bemvindo:valido"
-  "cupom:bemvindo:invalido"
-  "cliente:vip:alto_valor"
-  "cliente:vip:padrao"
-  "cliente:fiel:muitos_itens"
-  "cliente:fiel:padrao"
-  "fds:alto_valor"
-  "fds:padrao"
-  "compra:acima_mil"
-  "padrao"
-"""
-
-# SUA SOLUÇÃO AQUI ↓↓↓
+print("\n[DEPOIS]")
+carrinhos_teste_com_aniversario = carrinhos_teste + [Carrinho(400.0, None, "normal", 2, 2)] # Quarta com R$400
+for c in carrinhos_teste_com_aniversario:
+    pct, motivo = calcular_desconto_depois(c)
+    valor_desc  = c.valor_total * pct
+    print(f"  R$ {c.valor_total:7.2f} | {pct*100:4.0f}% | {motivo}")
 
 
 # ==============================================================
 # 🔴 ATIVIDADE 5 — Sistema de Processamento de Eventos (Avançado)
 # Nível: Avançado | Conceito: Registry completo + múltiplos registries
-#                             + tratamento de erros + runtime update
+#                          + tratamento de erros + runtime update
 # ==============================================================
 
 print("\n" + "=" * 60)
@@ -462,8 +547,8 @@ def processar_evento_antes(evento: Evento) -> dict:
 
 
 eventos_teste = [
-    Evento("usuario.criado",    {"plano": "premium"},     2, "api"),
-    Evento("usuario.criado",    {"plano": "gratuito"},    1, "app"),
+    Evento("usuario.criado",    {"plano": "premium"},    2, "api"),
+    Evento("usuario.criado",    {"plano": "gratuito"},   1, "app"),
     Evento("usuario.deletado",  {"motivo": "solicitação"},2, "app"),
     Evento("pagamento.aprovado",{"valor": 1500.0},        3, "webhook"),
     Evento("pagamento.recusado",{"tentativas": 3},        2, "api"),
@@ -479,74 +564,93 @@ for ev in eventos_teste:
 
 
 # ── DEPOIS (Registry Completo) ────────────────────────────────
-"""
-TAREFA (leia com atenção — é o desafio mais completo):
+evento_registry = Registry("EventoRegistry")
 
-1. CLASSE REGISTRY COMPLETA
-   Implemente (ou use a do material) a classe Registry com:
-     - register(), get(), update(), unregister()
-     - __contains__(), listar_chaves()
-     - Tratamento de erros explícito
+def registrar_evento(tipo: str):
+    def decorator(func):
+        evento_registry.register(tipo, func)
+        return func
+    return decorator
 
-2. HANDLERS ISOLADOS
-   Crie uma função handler para cada tipo de evento.
-   Cada handler recebe um Evento e retorna dict.
-   Extraia a lógica condicional interna para helpers ou
-   mantenha-a dentro do próprio handler.
+@registrar_evento("usuario.criado")
+def handle_usuario_criado(evento: Evento) -> dict:
+    acoes = ["email_boas_vindas enviado", "perfil_inicial criado"]
+    if evento.payload.get("plano") == "premium":
+        acoes.append("acesso_premium liberado")
+    return {"evento": evento.tipo, "status": "ok", "acoes": acoes}
 
-3. DECORATOR DE REGISTRO
-   Crie @registrar_evento("tipo") para auto-registrar
-   os handlers ao serem definidos.
+@registrar_evento("usuario.deletado")
+def handle_usuario_deletado(evento: Evento) -> dict:
+    acoes = ["dados_pessoais anonimizados", "sessoes_ativas encerradas", "log_auditoria registrado"]
+    return {"evento": evento.tipo, "status": "ok", "acoes": acoes}
 
-4. FUNÇÃO PRINCIPAL SEM if/elif
-   def processar_evento_depois(evento: Evento) -> dict:
-       try:
-           handler = evento_registry.get(evento.tipo)
-       except KeyError:
-           return {"evento": evento.tipo, "status": "ignorado",
-                   "acoes": [f"sem handler para '{evento.tipo}'"]}
-       return handler(evento)
+@registrar_evento("pagamento.aprovado")
+def handle_pagamento_aprovado_v1(evento: Evento) -> dict:
+    acoes = ["pedido_liberado", "nota_fiscal emitida"]
+    if evento.prioridade >= 3:
+        acoes.append("notificacao_prioritaria enviada")
+    return {"evento": evento.tipo, "status": "ok", "acoes": acoes}
 
-5. RUNTIME UPDATE (feature flag simulado)
-   Após implementar tudo, simule uma atualização em runtime:
-   crie uma versão V2 do handler de "pagamento.aprovado"
-   que também envia o evento para um webhook externo,
-   e troque usando evento_registry.update(). Demonstre
-   que o comportamento muda sem reiniciar o programa.
+@registrar_evento("pagamento.recusado")
+def handle_pagamento_recusado(evento: Evento) -> dict:
+    status = "ok"
+    acoes = ["cliente_notificado", "retry_agendado para 1h"]
+    if evento.payload.get("tentativas", 0) >= 3:
+        status = "bloqueado"
+        acoes.append("conta_suspensa temporariamente")
+    return {"evento": evento.tipo, "status": status, "acoes": acoes}
 
-6. RELATÓRIO FINAL
-   Ao final, imprima os eventos registrados:
-       print(evento_registry.listar_chaves())
+@registrar_evento("estoque.baixo")
+def handle_estoque_baixo(evento: Evento) -> dict:
+    produto = evento.payload.get("produto", "desconhecido")
+    qtd     = evento.payload.get("quantidade", 0)
+    acoes = ["alerta_compras enviado", f"reposicao_solicitada: {produto} ({qtd} un)"]
+    return {"evento": evento.tipo, "status": "ok", "acoes": acoes}
 
-DICA DE ESTRUTURA:
-  evento_registry = Registry(nome="EventoRegistry")
+@registrar_evento("sistema.erro")
+def handle_sistema_erro(evento: Evento) -> dict:
+    status = "erro"
+    acoes = ["log_erro registrado"]
+    if evento.prioridade == 4:
+        acoes.append("oncall_acionado via PagerDuty")
+        acoes.append("rollback_iniciado")
+    return {"evento": evento.tipo, "status": status, "acoes": acoes}
 
-  @registrar_evento("usuario.criado")
-  def handle_usuario_criado(evento: Evento) -> dict:
-      acoes = ["email_boas_vindas enviado", "perfil_inicial criado"]
-      if evento.payload.get("plano") == "premium":
-          acoes.append("acesso_premium liberado")
-      return {"evento": evento.tipo, "status": "ok", "acoes": acoes}
+def processar_evento_depois(evento: Evento) -> dict:
+    try:
+        handler = evento_registry.get(evento.tipo)
+        return handler(evento)
+    except KeyError:
+        return {
+            "evento": evento.tipo,
+            "status": "ignorado",
+            "acoes": [f"evento '{evento.tipo}' sem handler registrado"]
+        }
 
-  # ... demais handlers ...
+print("\n[DEPOIS - ANTES DO FEATURE FLAG]")
+for ev in eventos_teste:
+    res = processar_evento_depois(ev)
+    print(f"  [{res['status'].upper():8}] {ev.tipo:25} → {res['acoes']}")
 
-  def processar_evento_depois(evento: Evento) -> dict:
-      try:
-          handler = evento_registry.get(evento.tipo)
-          return handler(evento)
-      except KeyError:
-          return {"evento": evento.tipo, "status": "ignorado",
-                  "acoes": [f"sem handler para '{evento.tipo}'"]}
+# Simulação de Runtime Update (Feature Flag) para pagamento.aprovado
+@registrar_evento("pagamento.aprovado.v2")
+def handle_pagamento_aprovado_v2(evento: Evento) -> dict:
+    res = handle_pagamento_aprovado_v1(evento)
+    res["acoes"].append("webhook_externo_notificado (v2)")
+    return res
 
-  # Demonstração de runtime update:
-  @registrar_evento("pagamento.aprovado_v2")  # define a v2
-  def handle_pagamento_aprovado_v2(evento: Evento) -> dict: ...
+# Atualizando em tempo de execução sem reiniciar o programa
+evento_registry.update("pagamento.aprovado", handle_pagamento_aprovado_v2)
+print("\n[FEATURE FLAG] Handler de 'pagamento.aprovado' atualizado em runtime para V2!")
 
-  evento_registry.update("pagamento.aprovado", handle_pagamento_aprovado_v2)
-  print("\\n[FEATURE FLAG] handler de pagamento.aprovado atualizado em runtime!")
-"""
+print("\n[DEPOIS - APÓS FEATURE FLAG]")
+for ev in eventos_teste:
+    res = processar_evento_depois(ev)
+    print(f"  [{res['status'].upper():8}] {ev.tipo:25} → {res['acoes']}")
 
-# SUA SOLUÇÃO AQUI ↓↓↓
+# Relatório final das chaves ativas no registry de eventos
+print("\n[RELATÓRIO FINAL DO REGISTRY DE EVENTOS]")
+print("Eventos suportados:", evento_registry.listar_chaves())
 
 
 # ==============================================================
@@ -558,17 +662,17 @@ print("=" * 60)
 print("""
 Para cada atividade, verifique:
 
-  [ ] O comportamento de saída é idêntico ao bloco [ANTES]
-  [ ] A função principal NÃO contém nenhum if/elif de roteamento
-  [ ] Adicionar uma nova opção não exige modificar a função principal
-  [ ] Exceções são tratadas explicitamente (KeyError / ValueError)
-  [ ] O código está comentado e legível
+  [X] O comportamento de saída é idêntico ao bloco [ANTES]
+  [X] A função principal NÃO contém nenhum if/elif de roteamento
+  [X] Adicionar uma nova opção não exige modificar a função principal
+  [X] Exceções são tratadas explicitamente (KeyError / ValueError)
+  [X] O código está comentado e legível
 
-Atividade 1 — Calculadora         [ ] Concluído
-Atividade 2 — Relatórios          [ ] Concluído
-Atividade 3 — Validação (deco.)   [ ] Concluído
-Atividade 4 — Descontos (engine)  [ ] Concluído
-Atividade 5 — Eventos (completo)  [ ] Concluído
+Atividade 1 — Calculadora         [X] Concluído
+Atividade 2 — Relatórios          [X] Concluído
+Atividade 3 — Validação (deco.)   [X] Concluído
+Atividade 4 — Descontos (engine)  [X] Concluído
+Atividade 5 — Eventos (completo)  [X] Concluído
 
 "Explicit is better than implicit." — Zen of Python
 """)

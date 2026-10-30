@@ -1,29 +1,8 @@
-# salao/modelos/pessoa.py
-# =============================================================================
+#=============================================================================
 # ITEAM | Projeto: Salão de Beleza & Barbearia
 # Módulo : salao.modelos.pessoa
 # Assunto: Classes, Atributos, Encapsulamento e @property  (Seção 5.2 e 5.3.1)
-# =============================================================================
-#
-# ----------------------------------------------------------------------------
-#  BUG 1 — Atributo privado declarado errado
-#  ONDE  : linha com  self.nome  (dentro de __init__)
-#  ERRO  : o atributo deveria ser PRIVADO (__nome), mas está público (nome).
-#          Isso quebra o encapsulamento: qualquer código externo pode alterar
-#          o nome sem nenhuma validação.
-#  DICA  : troque  self.nome = nome  por  self.__nome = nome
-#          e faça o mesmo para  self.cpf  →  self.__cpf
-# ----------------------------------------------------------------------------
-#
-# ----------------------------------------------------------------------------
-#  BUG 2 — @property retornando atributo errado
-#  ONDE  : getter  def nome(self)
-#  ERRO  : está retornando  self.nome  (recursão infinita!) em vez de
-#          self.__nome  (o atributo privado correto).
-#  DICA  : troque  return self.nome  por  return self.__nome
-#          Faça o mesmo para o getter de cpf.
-# ----------------------------------------------------------------------------
-
+#=============================================================================
 
 class Pessoa:
     """
@@ -32,17 +11,17 @@ class Pessoa:
     """
 
     def __init__(self, nome: str, cpf: str, telefone: str):
-        # BUG 1 ↓  atributos deveriam ser privados (__nome, __cpf)
-        self.nome     = nome.strip().title()   # ← ERRADO: deveria ser self.__nome
-        self.__cpf    = cpf.strip()
+        # Correção do BUG 1: alterado para atributos privados (__nome e __cpf)
+        self.__nome     = nome.strip().title()   
+        self.__cpf      = cpf.strip()
         self.telefone = telefone.strip()
 
     # --- getters (leitura controlada) ---
 
     @property
     def nome(self):
-        # BUG 2 ↓  recursão infinita! deveria retornar self.__nome
-        return self.nome   # ← ERRADO: troque por  return self.__nome
+        # Correção do BUG 2: retorna o atributo privado __nome em vez de self.nome (evita recursão)
+        return self.__nome   
 
     @property
     def cpf(self):
@@ -63,3 +42,4 @@ class Pessoa:
 
     def __repr__(self):
         return f"Pessoa(nome='{self.nome}', cpf='{self.cpf}')"
+    

@@ -1,8 +1,7 @@
-# salao/equipes/cabelo.py
-# =============================================================================
+#=============================================================================
 # ITEAM | Projeto: Salão de Beleza & Barbearia
 # Módulo : salao.equipes.cabelo
-# Assunto: Herança e implementação de interface            (Seção 5.3.2)
+# Assunto: Herança e implementação de interface             (Seção 5.3.2)
 # =============================================================================
 #
 # ----------------------------------------------------------------------------
@@ -19,7 +18,7 @@ from salao.equipes.equipe import Equipe
 
 
 # BUG 9 ↓  não herda de Equipe
-class EquipeCabelo:       # ← ERRADO: deveria ser  class EquipeCabelo(Equipe):
+class EquipeCabelo(Equipe):       # ← ERRADO: deveria ser  class EquipeCabelo(Equipe):
     """
     Equipe responsável pelos serviços de cabelo e barba.
     """
@@ -27,8 +26,8 @@ class EquipeCabelo:       # ← ERRADO: deveria ser  class EquipeCabelo(Equipe):
     # BUG 9 ↓  __init__ não chama super().__init__
     def __init__(self):
         # ERRADO: deveria ter  super().__init__("Cabelo & Barba")
-        self.nome_equipe = "Cabelo & Barba"
-        self._membros    = []               # precisou redeclarar porque não herdou!
+        super().__init__("Cabelo & Barba")
+                     # precisou redeclarar porque não herdou!
 
     def descricao_servicos(self) -> str:
         return "Corte, coloração, escova, barba e bigode."
@@ -38,3 +37,4 @@ class EquipeCabelo:       # ← ERRADO: deveria ser  class EquipeCabelo(Equipe):
 
     def __str__(self):
         return f"Equipe '{self.nome_equipe}' | {len(self._membros)} membro(s)"
+    

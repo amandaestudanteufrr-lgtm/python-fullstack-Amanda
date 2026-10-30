@@ -1,8 +1,7 @@
-# salao/equipes/spa.py
-# =============================================================================
+#=============================================================================
 # ITEAM | Projeto: Salão de Beleza & Barbearia
 # Módulo : salao.equipes.spa
-# Assunto: Atributos de instância e __init__               (Seção 5.2.2)
+# Assunto: Atributos de instância e __init__              (Seção 5.2.2)
 # =============================================================================
 #
 # ----------------------------------------------------------------------------
@@ -12,7 +11,7 @@
 #          nunca é criado no  __init__. Isso gera AttributeError na execução.
 #  DICA  : adicione no __init__, após o super().__init__:
 #          self.pacotes_disponiveis = ["Relaxamento", "Pedras quentes",
-#                                      "Aromaterapia", "Drenagem"]
+#                                     "Aromaterapia", "Drenagem"]
 # ----------------------------------------------------------------------------
 
 from salao.equipes.equipe import Equipe
@@ -27,7 +26,8 @@ class EquipeSpa(Equipe):
         super().__init__("Spa & Bem-estar")
         # BUG 11 ↓  atributo 'pacotes_disponiveis' não declarado aqui
         # DICA: adicione a linha abaixo após o super().__init__:
-        # self.pacotes_disponiveis = ["Relaxamento", "Pedras quentes", "Aromaterapia", "Drenagem"]
+        self.pacotes_disponiveis = ["Relaxamento", "Pedras quentes",
+                                   "Aromaterapia", "Drenagem"]
 
     def descricao_servicos(self) -> str:
         # BUG 11 ↓  AttributeError: 'EquipeSpa' object has no attribute 'pacotes_disponiveis'
@@ -36,7 +36,7 @@ class EquipeSpa(Equipe):
 
     def realizar_servico(self, cliente: str, servico: str):
         # BUG 11 ↓  mesmo problema aqui
-        if servico not in self.pacotes_disponiveis:     # ← ERRO em tempo de execução
+        if servico not in self.pacotes_disponiveis:    # ← ERRO em tempo de execução
             print(f"  [Spa] Serviço '{servico}' não disponível.")
             return
         print(f"  [Spa] Iniciando pacote '{servico}' para {cliente}. Relaxe!")

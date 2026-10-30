@@ -4,8 +4,8 @@ AVALIAÇÃO — Módulo 04: Definição e Chamada de Funções
 Curso de Capacitação Full Stack – ITEAM
 Professor: Msc. Hygo Sousa De Oliveira
 
-Aluno(a): <SEU NOME COMPLETO>
-Data    : <DATA DE ENTREGA>
+Aluno(a): <Amanda Karolina Vasques Nascimento>
+Data    : <29/10/2026>
 =============================================================
 
 INSTRUÇÕES:
@@ -30,8 +30,8 @@ COMO VERIFICAR O PREENCHIMENTO:
 # Q01 🟢 — Retorno implícito None sem return
 #
 # def somar(a, b):
-#     resultado = a + b
-#
+#    resultado = a + b
+
 # valor = somar(3, 4)
 # print(valor)
 #
@@ -41,14 +41,14 @@ COMO VERIFICAR O PREENCHIMENTO:
 # D) 0
 # E) TypeError: somar() missing return
 # ------------------------------------------------------------
-Q01 = "?"
+Q01 = "C"
 
 
 # ------------------------------------------------------------
 # Q02 🟢 — Parâmetros com valor padrão (default)
 #
 # def saudar(nome, mensagem="Olá"):
-#     print(f"{mensagem}, {nome}!")
+#    print(f"{mensagem}, {nome}!")
 #
 # saudar("Ana")
 # saudar("Bruno", "Bom dia")
@@ -59,7 +59,7 @@ Q01 = "?"
 # D) "Olá, Ana!" e "Olá, Bruno!"
 # E) TypeError: saudar() missing 1 required argument
 # ------------------------------------------------------------
-Q02 = "?"
+Q02 = "A"
 
 
 # ------------------------------------------------------------
@@ -68,8 +68,8 @@ Q02 = "?"
 # x = 10
 #
 # def alterar():
-#     x = 99
-#     print(x)
+#    x = 99
+#    print(x)
 #
 # alterar()
 # print(x)
@@ -80,7 +80,7 @@ Q02 = "?"
 # D) 10 e 10
 # E) 99 e 99
 # ------------------------------------------------------------
-Q03 = "?"
+Q03 = "B"
 
 
 # ------------------------------------------------------------
@@ -97,7 +97,7 @@ Q03 = "?"
 # D) 7
 # E) 8
 # ------------------------------------------------------------
-Q04 = "?"
+Q04 = "E"
 
 
 # ------------------------------------------------------------
@@ -109,6 +109,7 @@ Q04 = "?"
 # def aplicar(funcao, valores):
 #     return [funcao(v) for v in valores]
 #
+
 # resultado = aplicar(dobrar, [1, 2, 3, 4])
 # print(resultado)
 #
@@ -118,7 +119,7 @@ Q04 = "?"
 # D) [1, 4, 9, 16]
 # E) 8
 # ------------------------------------------------------------
-Q05 = "?"
+Q05 = "C"
 
 
 # ------------------------------------------------------------
@@ -137,7 +138,7 @@ Q05 = "?"
 # D) 24
 # E) 16
 # ------------------------------------------------------------
-Q06 = "?"
+Q06 = "D"
 
 
 # ------------------------------------------------------------
@@ -146,7 +147,7 @@ Q06 = "?"
 # def registrar(**dados):
 #     """Registra informações arbitrárias de um objeto."""
 #     return {k.upper(): v for k, v in dados.items()}
-#
+
 # info = registrar(nome="Hygo", cargo="Professor", ativo=True)
 # print(info.get("CARGO"))
 # print(registrar.__doc__[:10])
@@ -157,7 +158,7 @@ Q06 = "?"
 # D) "Professor" e None
 # E) KeyError: "CARGO" e "Registra i"
 # ------------------------------------------------------------
-Q07 = "?"
+Q07 = "A"
 
 
 # ──────────────────────────────────────────────────────────────

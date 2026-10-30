@@ -1,5 +1,4 @@
-# salao/gestao/salao.py
-# =============================================================================
+#=============================================================================
 # ITEAM | Projeto: Salão de Beleza & Barbearia
 # Módulo : salao.gestao.salao
 # Assunto: Composição, agregação e design de classes       (Seção 5.5)
@@ -47,8 +46,8 @@ class Salao:
     def adicionar_equipe(self, equipe: Equipe):
         # BUG 12 ↓  falta validação de tipo antes do append
         # DICA: adicione aqui o bloco:
-        #   if not isinstance(equipe, Equipe):
-        #       raise TypeError("Apenas objetos Equipe podem ser adicionados.")
+        if not isinstance(equipe, Equipe):
+            raise TypeError("Apenas objetos Equipe podem ser adicionados.")
         self.__equipes.append(equipe)   # ← sem validação qualquer coisa entra
         print(f"  Equipe '{equipe.nome_equipe}' registrada no salão.")
 
@@ -94,7 +93,7 @@ class Salao:
 
         for f in todos_funcionarios:
             # BUG 13 ↓  usando salario_base em vez de calcular_salario()
-            total += f.salario_base   # ← ERRADO: troque por  f.calcular_salario()
+            total += f.calcular_salario()   # ← ERRADO: troque por  f.calcular_salario()
             print(f"  {f}")
 
         # Adiciona o salário do coordenador também
@@ -110,3 +109,4 @@ class Salao:
             f"Equipes: {len(self.__equipes)} | "
             f"Equipamentos: {len(self.__equipamentos)}"
         )
+    

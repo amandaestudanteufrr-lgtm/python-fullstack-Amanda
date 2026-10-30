@@ -1,11 +1,10 @@
-# salao/equipes/equipe.py
-# =============================================================================
+#=============================================================================
 # ITEAM | Projeto: Salão de Beleza & Barbearia
 # Módulo : salao.equipes.equipe
-# Assunto: Interface / Classe Abstrata com ABC             (Seção 5.3.3 e 5.7)
-# =============================================================================
+# Assunto: Interface / Classe Abstrata com ABC            (Seção 5.3.3 e 5.7)
+#=============================================================================
 #
-# ----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 #  BUG 7 — Classe abstrata sem herdar de ABC
 #  ONDE  : definição  class Equipe:
 #  ERRO  : a classe tenta usar @abstractmethod, mas não herda de ABC.
@@ -14,9 +13,9 @@
 #  DICA  : troque  class Equipe:  por  class Equipe(ABC):
 #          e certifique-se de que o import  from abc import ABC, abstractmethod
 #          está presente (já está correto aqui).
-# ----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 #
-# ----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 #  BUG 8 — @abstractmethod faltando no método realizar_servico
 #  ONDE  : método  realizar_servico
 #  ERRO  : o método deveria ser abstrato (forçar subclasses a implementar),
@@ -29,7 +28,7 @@ from salao.modelos.funcionario import Funcionario
 
 
 # BUG 7 ↓  não herda de ABC
-class Equipe:          # ← ERRADO: deveria ser  class Equipe(ABC):
+class Equipe(ABC):          # ← ERRADO: deveria ser  class Equipe(ABC):
     """
     Interface base para todas as equipes do salão.
     Define o contrato que TODA equipe deve cumprir.
@@ -61,9 +60,11 @@ class Equipe:          # ← ERRADO: deveria ser  class Equipe(ABC):
         pass
 
     # BUG 8: falta @abstractmethod aqui ↓
+    @abstractmethod
     def realizar_servico(self, cliente: str, servico: str):  # ← ERRADO: falta @abstractmethod acima
         """Registra a realização de um serviço."""
-        raise NotImplementedError("Subclasses devem implementar realizar_servico().")
+        pass
 
     def __str__(self):
         return f"Equipe '{self.nome_equipe}' | {len(self._membros)} membro(s)"
+    
